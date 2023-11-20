@@ -1,6 +1,6 @@
 # Northcoders News API
 
-## setup
+## Setup
 
 To run this project, create two files:
 
