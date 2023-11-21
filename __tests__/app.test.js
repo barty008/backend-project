@@ -82,3 +82,24 @@ describe("/api", () => {
       })
   })
 })
+
+// articles
+describe("/api/articles/", () => {
+  test("GET: 200 article object with correct properties", () => {
+    return request(app)
+      .get("/api/articles/10")
+      .expect(200)
+      .then(({ body }) => {
+        const { article } = body
+        expect(article).toMatchObject({
+          title: expect.any(String),
+          topic: expect.any(String),
+          author: expect.any(String),
+          body: expect.any(String),
+          created_at: expect.any(String),
+          votes: expect.any(Number),
+          article_img_url: expect.any(String),
+        })
+      })
+  })
+})
