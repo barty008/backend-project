@@ -1,9 +1,10 @@
 const express = require("express")
-const { getTopics } = require("./controller/topic controller")
+const { getTopics, getEndPoints } = require("./controller/controller")
 const app = express()
 app.use(express.json())
 
 app.get("/api/topics", getTopics)
+app.get("/api", getEndPoints)
 // error 404
 app.use((req, res, next) => {
   res.status(404).send({ msg: "not found" })
