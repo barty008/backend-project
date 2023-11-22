@@ -23,6 +23,9 @@ describe("app behaviour", () => {
       })
   })
 })
+
+// =============
+// =============
 describe("/api/topics", () => {
   test("GET: 200 returns an array of all topics", () => {
     return request(app)
