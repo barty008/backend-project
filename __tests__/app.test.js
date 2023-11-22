@@ -127,8 +127,6 @@ describe("/api/articles/", () => {
   })
 
   test("GET non-existent article should return 404", () => {
-    return request(app)
-      .get("/api/articles/9999") // Assuming 9999 is a non-existent article ID
-      .expect(404)
+    return request(app).get("/api/articles/9999").expect(404)
   })
 })
