@@ -1,5 +1,9 @@
-const { retrieveTopics, selectArticleById } = require("../model/topic-model")
 const fs = require("fs/promises")
+const {
+  retrieveTopics,
+  selectArticleById,
+  selectAllArticles,
+} = require("../model/model")
 
 exports.getTopics = (req, res, next) => {
   retrieveTopics()
@@ -38,6 +42,16 @@ exports.getArticleById = (req, res, next) => {
       }
 
       res.status(200).send({ article })
+    })
+    .catch(next)
+}
+
+exports.getAllArticles = (req, res, next) => {
+  // call model
+  selectAllArticles()
+    .then((articles) => {
+      res.status(200).send({ articles })
+      console.log(articles, "<--articles===")
     })
     .catch(next)
 }

@@ -3,6 +3,7 @@ const {
   getTopics,
   getEndPoints,
   getArticleById,
+  getAllArticles
 } = require("./controller/controller")
 
 const app = express()
@@ -12,6 +13,7 @@ app.get("/api/topics", getTopics)
 app.get("/api", getEndPoints)
 app.get("/api/articles/:article_id", getArticleById)
 
+app.get("/api/articles", getAllArticles)
 // error 404
 app.use((req, res, next) => {
   console.log("404 error middleware triggered")

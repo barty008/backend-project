@@ -4,7 +4,6 @@ exports.retrieveTopics = () => {
     return rows
   })
 }
-// get the article by id
 exports.selectArticleById = (article_id) => {
   // select all columns from articles where article_id matches the provided parameter
   const queryArticles = `
@@ -26,5 +25,20 @@ exports.selectArticleById = (article_id) => {
 
       return rows[0]
     }
+  })
+}
+
+exports.selectAllArticles = () => {
+  const queryString = `
+  SELECT articles.author, articles.title, articles.article_id, articles.topic, 
+         articles.created_at, articles.votes, articles.article_img_url,
+         COUNT(comments.comment_id)::INTEGER as comment_count
+  FROM articles
+  LEFT JOIN comments USING (article_id)
+  GROUP BY articles.article_id
+  ORDER BY created_at DESC
+  `
+  return db.query(queryString).then(({ rows }) => {
+    return rows
   })
 }
