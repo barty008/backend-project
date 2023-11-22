@@ -27,14 +27,14 @@ exports.getArticleById = (req, res, next) => {
   const parsedArticleId = parseInt(article_id)
 
   if (isNaN(parsedArticleId)) {
-    return res.status(400).json({ msg: "Invalid article ID" })
+    return res.status(400).json({ msg: "Bad request - Invalid article ID" })
   }
 
   selectArticleById(parsedArticleId)
     .then((article) => {
       if (!article) {
         // article not found, send 404 response
-        return res.status(404).json({ msg: "Article not found" })
+        return res.status(404).json({ msg: "Not found - Article not found" })
       }
 
       res.status(200).send({ article })

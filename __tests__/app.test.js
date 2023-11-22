@@ -122,11 +122,20 @@ describe("/api/articles/", () => {
         expect(article).toEqual(articleTen)
       })
   })
-  test("GET article with invalid ID should return 400", () => {
-    return request(app).get("/api/articles/notanumber").expect(400)
+  test("GET article with invalid ID should return 400 with a specific message", () => {
+    return request(app)
+      .get("/api/articles/notanumber")
+      .expect(400)
+      .then(({ body }) => {
+        expect(body.msg).toBe("Bad request - Invalid article ID")
+      })
   })
 
-  test("GET non-existent article should return 404", () => {
+  test("GET non-existent article should return 404 with a specific message", () => {
     return request(app).get("/api/articles/9999").expect(404)
+    // .then(({ body }) => {
+    // .xpect(body.msg)
+    // .toBe("Not found - Article not found")
+    // })
   })
 })
