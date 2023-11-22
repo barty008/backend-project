@@ -53,4 +53,22 @@ describe("/api/articles", () => {
         expect(articles.length).toBe(testArticleData.length)
       })
   })
+  test("GET: all articles in the correct order", () => {
+    const { articleData: testArticleData } = testData
+
+    return request(app)
+      .get("/api/articles")
+      .expect(200)
+      .then((response) => {
+        const { articles } = response.body
+        //  correct order logic
+        for (let i = 0; i < articles.length - 1; i++) {
+          // convert date strings into JS Date objects
+          const currentDate = new Date(articles[i].created_at).getTime()
+          const nextDate = new Date(articles[i + 1].created_at).getTime()
+          // compare the two dates as numbers using getTime()
+          expect(currentDate).toBeGreaterThanOrEqual(nextDate)
+        }
+      })
+  })
 })
