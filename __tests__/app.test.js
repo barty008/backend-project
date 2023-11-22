@@ -102,4 +102,33 @@ describe("/api/articles/", () => {
         })
       })
   })
+  test("GET article 10", () => {
+    return request(app)
+      .get("/api/articles/10")
+      .expect(200)
+      .then(({ body }) => {
+        const { article } = body
+        const articleTen = {
+          article_id: 10,
+          title: "Seven inspirational thought leaders from Manchester UK",
+          topic: "mitch",
+          author: "rogersop",
+          body: "Who are we kidding, there is only one, and it's Mitch!",
+          created_at: "2020-05-14T04:15:00.000Z",
+          votes: 0,
+          article_img_url:
+            "https://images.pexels.com/photos/158651/news-newsletter-newspaper-information-158651.jpeg?w=700&h=700",
+        }
+        expect(article).toEqual(articleTen)
+      })
+  })
+  test("GET article with invalid ID should return 400", () => {
+    return request(app).get("/api/articles/notanumber").expect(400)
+  })
+
+  test("GET non-existent article should return 404", () => {
+    return request(app)
+      .get("/api/articles/9999") // Assuming 9999 is a non-existent article ID
+      .expect(404)
+  })
 })

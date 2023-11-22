@@ -24,11 +24,19 @@ exports.getEndPoints = (req, res, next) => {
 
 exports.getArticleById = (req, res, next) => {
   const { article_id } = req.params
-  console.log(req.params)
+  const parsedArticleId = parseInt(article_id)
 
-  selectArticleById(article_id)
+  if (isNaN(parsedArticleId)) {
+    return res.status(400).json({ msg: "Invalid article ID" })
+  }
+
+  selectArticleById(parsedArticleId)
     .then((article) => {
-      console.log("Retrieved article:", article)
+      if (!article) {
+        // article not found, send 404 response
+        return res.status(404).json({ msg: "Article not found" })
+      }
+
       res.status(200).send({ article })
     })
     .catch(next)
