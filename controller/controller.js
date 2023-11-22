@@ -13,7 +13,7 @@ exports.getAllArticles = (req, res, next) => {
   selectAllArticles()
     .then((articles) => {
       res.status(200).send({ articles })
-      // console.log(articles, "<--articles===")
+      console.log(articles, "<--articles===")
     })
     .catch(next)
 }
