@@ -4,6 +4,7 @@ const {
   selectArticleById,
   selectAllArticles,
   selectComments,
+  checkArticleExists,
 } = require("../model/model")
 
 exports.getTopics = (req, res, next) => {
@@ -56,14 +57,20 @@ exports.getAllArticles = (req, res, next) => {
     })
     .catch(next)
 }
-// comments
+// comments - two functions checking if it exists and getting the comments
 
 exports.getComments = (req, res, next) => {
+  // extracting the id from the request parameter
   const { article_id } = req.params
-
-  const promises = [selectComments(article_id), checkArticleExists(article_id)]
-  Promise.all(promises)
-    .then(([comments, _]) => {
+  //1 need to retrieve comments for the articleid
+  // 2 need to check if the artile exists, create a funciton for this = needs to be in model
+  const allPromises = [
+    selectComments(article_id),
+    checkArticleExists(article_id),
+  ]
+  Promise.all(allPromises)
+    .then(([comments]) => {
+      // console.log(comments, "<-------")
       res.status(200).send({ comments })
     })
     .catch(next)

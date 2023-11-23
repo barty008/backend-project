@@ -303,3 +303,82 @@ describe("/api/articles", () => {
       })
   })
 })
+
+// task 6
+
+describe("/api/articles/:article_id/comment", () => {
+  test("GET: 200 responds with an array of comments for a specific article", (done) => {
+    const { commentData: modifiedCommentData } = testData
+    request(app)
+      .get("/api/articles/1/comments")
+      .expect(200)
+      .then(({ body }) => {
+        const { comments: receivedComments } = body
+
+        const expectedNumberOfComments = modifiedCommentData.filter(
+          (comment) => {
+            return comment.article_id === 1
+          }
+        ).length
+        expect(receivedComments.length).toBe(expectedNumberOfComments)
+        done()
+      })
+      .catch(done)
+  })
+
+  test("GET: 200 returns an empty array if the specified article has no comments", (done) => {
+    request(app)
+      .get("/api/articles/10/comments")
+      .expect(200)
+      .then(({ body }) => {
+        const { comments: receivedComments } = body
+        console.log(receivedComments, "<----")
+        expect(receivedComments).toEqual([])
+        done()
+      })
+      .catch(done)
+  })
+
+  test("GET: 200 comments have the correct properties for a specific article", (done) => {
+    const { commentData: modifiedCommentData } = testData
+    request(app)
+      .get("/api/articles/2/comments")
+      .expect(200)
+      .then(({ body }) => {
+        const { comments: receivedComments } = body
+
+        const expectedNumberOfComments = modifiedCommentData.filter(
+          (comment) => {
+            return comment.article_id === 2
+          }
+        ).length
+        expect(receivedComments.length).toBe(expectedNumberOfComments)
+        receivedComments.forEach((comment) => {
+          expect(comment).toMatchObject({
+            comment_id: expect.any(Number),
+            votes: expect.any(Number),
+            created_at: expect.any(String),
+            author: expect.any(String),
+            body: expect.any(String),
+            article_id: expect.any(Number),
+          })
+        })
+        done()
+      })
+      .catch(done)
+  })
+
+  test("GET: 200 returns the most recent comments first for a specific article", (done) => {
+    request(app)
+      .get("/api/articles/1/comments")
+      .expect(200)
+      .then(({ body }) => {
+        const { comments: receivedComments } = body
+        expect(receivedComments).toBeSortedBy("created_at", {
+          descending: true,
+        })
+        done()
+      })
+      .catch(done)
+  })
+})

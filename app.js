@@ -3,7 +3,8 @@ const {
   getTopics,
   getEndPoints,
   getArticleById,
-  getAllArticles
+  getAllArticles,
+  getComments,
 } = require("./controller/controller")
 
 const app = express()
@@ -12,6 +13,7 @@ app.use(express.json())
 app.get("/api/topics", getTopics)
 app.get("/api", getEndPoints)
 app.get("/api/articles/:article_id", getArticleById)
+app.get("/api/articles/:article_id/comments", getComments)
 
 app.get("/api/articles", getAllArticles)
 // error 404

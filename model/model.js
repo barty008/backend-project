@@ -43,6 +43,41 @@ exports.selectAllArticles = () => {
   })
 }
 
+exports.checkArticleExists = (article_id) => {
+  return db
+    .query(
+      `
+  SELECT *
+  FROM articles
+  WHERE article_id = $1
+  `,
+      [article_id]
+    )
+    .then(({ rows }) => {
+      console.log(rows, "<----")
+      if (!rows.length) {
+        return Promise.reject({ status: 404, msg: "Not Found" })
+      }
+    })
+}
+
+exports.checkArticleExists = (article_id) => {
+  return db
+    .query(
+      `
+  SELECT *
+  FROM articles
+  WHERE article_id = $1
+  `,
+      [article_id]
+    )
+    .then(({ rows }) => {
+      if (!rows.length) {
+        return Promise.reject({ status: 404, msg: "Not Found" })
+      }
+    })
+}
+
 exports.selectComments = (article_id) => {
   const queryString = `
   SELECT comments.comment_id, comments.votes, comments.created_at,
