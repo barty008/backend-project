@@ -381,4 +381,24 @@ describe("/api/articles/:article_id/comment", () => {
       })
       .catch(done)
   })
+  test("GET: 404 for non-existent article should return 'Not Found' message", () => {
+    const { articleData: modifiedArticleData } = testData
+    return request(app)
+      .get(`/api/articles/${modifiedArticleData.length + 1}/comments`)
+      .expect(404)
+      .then(({ body }) => {
+        expect(body.status).toBe(404)
+        expect(body.msg).toBe("Not Found")
+      })
+  })
+
+  test("GET: 400 for invalid article_id type should return 'Bad Request' message", () => {
+    return request(app)
+      .get(`/api/articles/unknown/comments`)
+      .expect(400)
+      .then(({ body }) => {
+        expect(body.status).toBe(400)
+        expect(body.msg).toBe("Bad Request")
+      })
+  })
 })
