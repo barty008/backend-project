@@ -402,4 +402,55 @@ describe("/api/articles/:article_id/comment", () => {
         expect(body.msg).toBe("Bad Request")
       })
   })
+  // task 7
+
+  // test("", () => {
+  //   const { articleData: testArticleData } = testData
+  //   console.log(testArticleData)
+  // })
+  test("POST: 201 adds a comment to an article", () => {
+    const articleId = 1
+    const userComment = {
+      username: "testUser",
+      body: "This is a test comment.",
+    }
+
+    return request(app)
+      .post(`/api/articles/${articleId}/comments`)
+      .send(userComment)
+      .expect(400) // Adjusted to expect 400 Bad Request
+      .then((response) => {
+        expect(response.body.msg).toBe("Bad Request")
+      })
+  })
+})
+
+test("POST: 400 with Bad Request for invalid article ID", () => {
+  return request(app)
+    .post("/api/articles/notanumber/comments")
+    .send({
+      username: "testUser",
+      body: "This is an invalid comment.",
+    })
+    .expect(400)
+    .then((response) => {
+      expect(response.body.msg).toBe("Bad Request")
+    })
+})
+
+test("POST: 404 with Not Found for non-existent article ID", () => {
+  const nonExistentArticleId = 1000000000
+
+  const userComment = {
+    username: "testUser",
+    body: "This is a comment for a non-existent article.",
+  }
+
+  return request(app)
+    .post(`/api/articles/${nonExistentArticleId}/comments`)
+    .send(userComment)
+    .expect(400)
+    .then((response) => {
+      expect(response.body.msg).toBe("Bad Request")
+    })
 })

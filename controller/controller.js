@@ -5,6 +5,8 @@ const {
   selectAllArticles,
   selectComments,
   checkArticleExists,
+  insertArticleComment,
+  addCommentToArticle,
 } = require("../model/model")
 
 exports.getTopics = (req, res, next) => {
@@ -74,4 +76,22 @@ exports.getComments = (req, res, next) => {
       res.status(200).send({ comments })
     })
     .catch(next)
+}
+// task 7
+exports.addCommentToArticle = (request, response, next) => {
+  const { articleId } = request.params
+  const commentData = request.body
+
+  if (!/^[0-9]+$/.test(articleId)) {
+    next({ status: 400, msg: "Bad Request" })
+  } else {
+    checkArticleExistence(articleId)
+      .then(() => {
+        return addCommentToArticle(articleId, commentData)
+      })
+      .then((newComment) => {
+        response.status(201).send({ newComment })
+      })
+      .catch(next)
+  }
 }
