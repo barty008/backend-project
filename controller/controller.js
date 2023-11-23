@@ -5,8 +5,9 @@ const {
   selectAllArticles,
   selectComments,
   checkArticleExists,
-  insertArticleComment,
+
   addCommentToArticle,
+  updateArticleVotes,
 } = require("../model/model")
 
 exports.getTopics = (req, res, next) => {
@@ -94,4 +95,24 @@ exports.addCommentToArticle = (request, response, next) => {
       })
       .catch(next)
   }
+}
+// 8
+exports.updateArticleById = (req, res, next) => {
+  const { article_id } = req.params
+  const { inc_votes } = req.body
+  // console.log(inc_votes)
+  // inc_votes is a valid number
+  if (!Number.isInteger(inc_votes)) {
+    return next({
+      status: 400,
+      msg: "Bad Request - inc_votes must be an integer",
+    })
+  }
+
+  //  model function to update the article
+  updateArticleVotes(article_id, inc_votes)
+    .then((updatedArticle) => {
+      res.status(200).send({ article: updatedArticle })
+    })
+    .catch(next)
 }

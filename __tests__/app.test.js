@@ -333,7 +333,7 @@ describe("/api/articles/:article_id/comment", () => {
       .expect(200)
       .then(({ body }) => {
         const { comments: receivedComments } = body
-        console.log(receivedComments, "<----")
+        // console.log(receivedComments, "<----")
         expect(receivedComments).toEqual([])
         done()
       })
@@ -452,5 +452,49 @@ test("POST: 404 with Not Found for non-existent article ID", () => {
     .expect(400)
     .then((response) => {
       expect(response.body.msg).toBe("Bad Request")
+    })
+})
+// 8==========
+test("should update an artcle votes with a positive value", (done) => {
+  request(app)
+    .patch("/api/articles/1")
+    .send({ inc_votes: 5 })
+    .expect(200)
+    .end((err, res) => {
+      if (err) return done(err)
+
+      // console.log(res.body.article, "< ---------reponse")
+      // console.log(res.body.article)
+      expect(res.body.article).toBeDefined()
+
+      expect(res.body.article.votes).toBeGreaterThan(0)
+      done()
+    })
+})
+test("should handle bad request when inc_votes is not an integer", (done) => {
+  request(app)
+    .patch("/api/articles/1")
+    .send({ inc_votes: "invalid" })
+    .expect(400, done)
+})
+
+test("should handle not found when the article_id does not exist", (done) => {
+  request(app)
+    .patch("/api/articles/999")
+    .send({ inc_votes: 2 })
+    .expect(404, done)
+})
+test("should have the correct response structure", (done) => {
+  request(app)
+    .patch("/api/articles/1")
+    .send({ inc_votes: 5 })
+    .expect(200)
+    .end((err, res) => {
+      if (err) return done(err)
+
+      expect(res.body.article).toHaveProperty("title")
+      expect(res.body.article).toHaveProperty("author")
+
+      done()
     })
 })

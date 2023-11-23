@@ -106,3 +106,28 @@ exports.addCommentToArticle = (articleId, userComment) => {
     return rows[0]
   })
 }
+// 8
+exports.updateArticleVotes = (article_id, inc_votes) => {
+  const queryString = `
+    UPDATE articles
+    SET votes = votes + $1
+    WHERE article_id = $2
+    RETURNING *
+  `
+
+  const queryValues = [inc_votes, article_id]
+
+  // console.log("SQL Query:", queryString)
+  // console.log("Query Values:", queryValues)
+
+  return db.query(queryString, queryValues).then(({ rows }) => {
+    if (!rows.length) {
+      return Promise.reject({
+        status: 404,
+        msg: "Not Found - Article not found",
+      })
+    }
+    // console.log("Updated Article:=========", rows[0])
+    return rows[0]
+  })
+}
