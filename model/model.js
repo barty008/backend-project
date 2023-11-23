@@ -42,3 +42,17 @@ exports.selectAllArticles = () => {
     return rows
   })
 }
+
+exports.selectComments = (article_id) => {
+  const queryString = `
+  SELECT comments.comment_id, comments.votes, comments.created_at,
+         comments.author, comments.body, comments.article_id
+  FROM comments
+  JOIN articles USING (article_id)
+  WHERE articles.article_id = $1
+  ORDER BY comments.created_at DESC
+  `
+  return db.query(queryString, [article_id]).then(({ rows }) => {
+    return rows
+  })
+}

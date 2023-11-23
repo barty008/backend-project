@@ -3,6 +3,7 @@ const {
   retrieveTopics,
   selectArticleById,
   selectAllArticles,
+  selectComments,
 } = require("../model/model")
 
 exports.getTopics = (req, res, next) => {
@@ -51,7 +52,19 @@ exports.getAllArticles = (req, res, next) => {
   selectAllArticles()
     .then((articles) => {
       res.status(200).send({ articles })
-      console.log(articles, "<--articles===")
+      // console.log(articles, "<--articles===")
+    })
+    .catch(next)
+}
+// comments
+
+exports.getComments = (req, res, next) => {
+  const { article_id } = req.params
+
+  const promises = [selectComments(article_id), checkArticleExists(article_id)]
+  Promise.all(promises)
+    .then(([comments, _]) => {
+      res.status(200).send({ comments })
     })
     .catch(next)
 }
