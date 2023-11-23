@@ -5,6 +5,7 @@ const {
   getArticleById,
   getAllArticles,
   getComments,
+  addCommentToArticle,
 } = require("./controller/controller")
 
 const customError = (status, msg) => ({ status, msg })
@@ -23,7 +24,7 @@ const pgError = (err, req, res, next) => {
 }
 
 const serverError = (err, req, res, next) => {
-  console.log(err)
+  // console.log(err)
   if (err.status) {
     res.status(err.status).send({ status: err.status, msg: err.msg })
   } else {
@@ -38,7 +39,7 @@ app.get("/api/topics", getTopics)
 app.get("/api", getEndPoints)
 app.get("/api/articles/:article_id", getArticleById)
 app.get("/api/articles/:article_id/comments", getComments)
-
+app.post("/api/articles/:article_id/comments", addCommentToArticle)
 app.get("/api/articles", getAllArticles)
 
 app.use((req, res, next) => {

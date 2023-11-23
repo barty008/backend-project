@@ -91,3 +91,18 @@ exports.selectComments = (article_id) => {
     return rows
   })
 }
+// task 7
+exports.addCommentToArticle = (articleId, userComment) => {
+  const queryString = `
+    INSERT INTO comments 
+    (article_id, author, body)
+    VALUES
+    ($1, $2, $3)
+    RETURNING *
+  `
+  const queryValues = [articleId, userComment.username, userComment.body]
+
+  return db.query(queryString, queryValues).then(({ rows }) => {
+    return rows[0]
+  })
+}
