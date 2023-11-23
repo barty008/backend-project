@@ -6,8 +6,12 @@ const {
   getAllArticles,
   getComments,
 } = require("./controller/controller")
+
+const customError = (status, msg) => ({ status, msg })
+
 const error404 = (req, res, next) => {
-  res.status(404).send({ status: 404, msg: "Not Found" })
+  const customErrorMessage = "Not Found"
+  res.status(404).send(customError(404, customErrorMessage))
 }
 
 const pgError = (err, req, res, next) => {

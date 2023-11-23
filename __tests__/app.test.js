@@ -6,6 +6,7 @@ const testData = require("../db/data/test-data")
 const sorted = require("jest-sorted")
 //
 const fs = require("fs/promises")
+const comments = require("../db/data/test-data/comments")
 beforeAll(() => {
   return fs
     .readFile(`${__dirname}/../endpoints.json`, "utf-8")
@@ -323,7 +324,7 @@ describe("/api/articles/:article_id/comment", () => {
         expect(receivedComments.length).toBe(expectedNumberOfComments)
         done()
       })
-      .catch(done)
+    // .catch(done)
   })
 
   test("GET: 200 returns an empty array if the specified article has no comments", (done) => {
@@ -336,7 +337,7 @@ describe("/api/articles/:article_id/comment", () => {
         expect(receivedComments).toEqual([])
         done()
       })
-      .catch(done)
+    // .catch(done)
   })
 
   test("GET: 200 comments have the correct properties for a specific article", (done) => {
@@ -346,7 +347,7 @@ describe("/api/articles/:article_id/comment", () => {
       .expect(200)
       .then(({ body }) => {
         const { comments: receivedComments } = body
-
+        const expectedArticleId = 2
         const expectedNumberOfComments = modifiedCommentData.filter(
           (comment) => {
             return comment.article_id === 2
@@ -360,12 +361,12 @@ describe("/api/articles/:article_id/comment", () => {
             created_at: expect.any(String),
             author: expect.any(String),
             body: expect.any(String),
-            article_id: expect.any(Number),
+            article_id: expectedArticleId,
           })
         })
         done()
       })
-      .catch(done)
+    // .catch(done)
   })
 
   test("GET: 200 returns the most recent comments first for a specific article", (done) => {
