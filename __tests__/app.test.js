@@ -404,10 +404,6 @@ describe("/api/articles/:article_id/comment", () => {
   })
   // task 7
 
-  // test("", () => {
-  //   const { articleData: testArticleData } = testData
-  //   console.log(testArticleData)
-  // })
   test("POST: 201 adds a comment to an article", () => {
     const articleId = 1
     const userComment = {
@@ -486,4 +482,45 @@ test("should handle not found when the article_id does not exist", (done) => {
     .patch("/api/articles/999")
     .send({ inc_votes: 2 })
     .expect(404, done)
+})
+
+// 9
+// __tests__/app.test.js
+test("should delete a comment by comment_id", (done) => {
+  request(app)
+    .delete("/api/comments/1")
+    .expect(204)
+    .end((err, res) => {
+      if (err) return done(err)
+
+      // Ensure that the response body is empty
+      expect(res.body).toEqual({})
+      done()
+    })
+})
+
+describe("deleteCommentById ()", () => {
+  test("should handle not found when the comment_id does not exist", (done) => {
+    request(app)
+      .delete("/api/comments/999")
+      .expect(404)
+      .end((err, res) => {
+        if (err) return done(err)
+
+        expect(res.body.msg).toBe("Not Found - Comment not found")
+        done()
+      })
+  })
+
+  test("should handle other errors when deleting a comment", (done) => {
+    request(app)
+      .delete("/api/comments/invalidCommentId")
+      .expect(400)
+      .end((err, res) => {
+        if (err) return done(err)
+
+        expect(res.body.msg).toBe("Bad Request")
+        done()
+      })
+  })
 })
