@@ -6,6 +6,7 @@ const {
   getAllArticles,
   getComments,
   addCommentToArticle,
+  updateArticleById,
 } = require("./controller/controller")
 
 const customError = (status, msg) => ({ status, msg })
@@ -41,6 +42,7 @@ app.get("/api/articles/:article_id", getArticleById)
 app.get("/api/articles/:article_id/comments", getComments)
 app.post("/api/articles/:article_id/comments", addCommentToArticle)
 app.get("/api/articles", getAllArticles)
+app.patch("/api/articles/:article_id", updateArticleById)
 
 app.use((req, res, next) => {
   console.log("404 error middleware triggered")
@@ -53,5 +55,32 @@ app.all("*", error404)
 app.use(pgError)
 // for server errors
 app.use(serverError)
+
+// Inside app.js
+
+const apiDescription = {
+  // overview endpoints to get information about available endpoints
+  "GET /api": {
+    description: "Get an overview of available endpoints",
+    responseBody: { endpoints: "object" },
+    errors: [],
+  },
+  "GET /api/topics": {
+    description: "Get all topics",
+    responseBody: { topics: "array" },
+    errors: [],
+  },
+  // patch   endpoint to update an article by article_id
+  "PATCH /api/articles/:article_id": {
+    description: "Update an article by article_id",
+    requestBody: { inc_votes: "integer" },
+    responseBody: { article: "object" },
+    errors: ["Bad Request", "Not Found"],
+  },
+}
+
+app.get("/api", (req, res) => {
+  res.status(200).send(apiDescription)
+})
 
 module.exports = { app }
