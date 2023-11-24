@@ -148,3 +148,33 @@ exports.deleteComment = (comment_id) => {
       }
     })
 }
+
+// 11
+// select articles from db based on chosen topic
+exports.selectArticlesByTopic = (topic) => {
+  // initial query to retrieve articles
+  let queryString = `
+    SELECT articles.author, articles.title, articles.article_id, articles.topic, 
+           articles.created_at, articles.votes, articles.article_img_url,
+           COUNT(comments.comment_id)::INTEGER as comment_count
+    FROM articles
+    LEFT JOIN comments USING (article_id)
+  `
+  // storing query parameter
+  const queryValues = []
+
+  // checking if the topic query parameter is provided
+  if (topic) {
+    queryString += ` WHERE articles.topic = $1`
+    queryValues.push(topic)
+  }
+
+  queryString += `
+    GROUP BY articles.article_id
+    ORDER BY created_at DESC
+  `
+  //
+  return db.query(queryString, queryValues).then(({ rows }) => {
+    return rows
+  })
+}

@@ -9,6 +9,7 @@ const {
   addCommentToArticle,
   updateArticleVotes,
   deleteComment,
+  selectArticlesByTopic,
 } = require("../model/model")
 
 exports.getTopics = (req, res, next) => {
@@ -127,5 +128,22 @@ exports.deleteCommentById = (req, res, next) => {
       // Respond with status 204 and no content
       res.status(204).end()
     })
+    .catch(next)
+}
+// 11
+// getiting articles by a specific topic
+exports.getArticlesByTopic = (req, res, next) => {
+  // getting topic query
+  const { topic } = req.query
+
+  console.log("Request received with topic:", topic)
+
+  // Call model function to get articles filtered by topic
+  selectArticlesByTopic(topic)
+    .then((articles) => {
+      // success
+      res.status(200).send({ articles })
+    })
+    // errors
     .catch(next)
 }

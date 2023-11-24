@@ -8,6 +8,7 @@ const {
   addCommentToArticle,
   updateArticleById,
   deleteCommentById,
+  getArticlesByTopic,
 } = require("./controller/controller")
 
 const customError = (status, msg) => ({ status, msg })
@@ -26,7 +27,6 @@ const pgError = (err, req, res, next) => {
 }
 
 const serverError = (err, req, res, next) => {
-  // console.log(err)
   if (err.status) {
     res.status(err.status).send({ status: err.status, msg: err.msg })
   } else {
@@ -43,8 +43,10 @@ app.get("/api/articles/:article_id", getArticleById)
 app.get("/api/articles/:article_id/comments", getComments)
 app.post("/api/articles/:article_id/comments", addCommentToArticle)
 app.get("/api/articles", getAllArticles)
-
+//
 app.get("/api/articles/topic", getAllArticles)
+
+app.get("/api/articles/topic", getArticlesByTopic)
 
 app.patch("/api/articles/:article_id", updateArticleById)
 app.delete("/api/comments/:comment_id", deleteCommentById)
@@ -60,8 +62,6 @@ app.all("*", error404)
 app.use(pgError)
 // for server errors
 app.use(serverError)
-
-// Inside app.js
 
 const apiDescription = {
   // overview endpoints to get information about available endpoints
@@ -83,7 +83,7 @@ const apiDescription = {
     errors: ["Bad Request", "Not Found"],
   },
   "GET /api/articles/topic": {
-    description: "Get all articles with optional topic query",
+    description: "get all articles with optional topic query",
     queryParameters: { topic: "string (optional)" },
     responseBody: { articles: "array" },
     errors: ["Bad Request", "Not Found"],
