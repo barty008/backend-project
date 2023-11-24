@@ -54,7 +54,6 @@ exports.checkArticleExists = (article_id) => {
       [article_id]
     )
     .then(({ rows }) => {
-      console.log(rows, "<----")
       if (!rows.length) {
         return Promise.reject({ status: 404, msg: "Not Found" })
       }
@@ -117,9 +116,6 @@ exports.updateArticleVotes = (article_id, inc_votes) => {
 
   const queryValues = [inc_votes, article_id]
 
-  // console.log("SQL Query:", queryString)
-  console.log("Query Values:", queryValues)
-
   return db.query(queryString, queryValues).then(({ rows }) => {
     if (!rows.length) {
       return Promise.reject({
@@ -127,7 +123,34 @@ exports.updateArticleVotes = (article_id, inc_votes) => {
         msg: "Not Found - Article not found",
       })
     }
-    console.log("Updated Article:=========", rows[0])
+
     return rows[0]
   })
+}
+
+// task 9
+// exports.deleteComment = (comment_id) => {
+//   return db.query("DELETE FROM comments WHERE comment_id = $1", [comment_id])
+// }
+
+exports.deleteComment = (comment_id) => {
+  return db
+    .query("DELETE FROM comments WHERE comment_id = $1 RETURNING *", [
+      comment_id,
+    ])
+    .then(({ rows }) => {
+      if (rows.length === 0) {
+        // If no rows were affected, the comment doesn't exist
+        return Promise.reject({
+          status: 404,
+          msg: "Not Found - Comment not found",
+        })
+      }
+    })
+}
+// 10
+exports.getAllUsersFromModel = () => {
+  return db
+    .query("SELECT username, name, avatar_url FROM users;")
+    .then(({ rows }) => rows)
 }

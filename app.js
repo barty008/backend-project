@@ -7,6 +7,8 @@ const {
   getComments,
   addCommentToArticle,
   updateArticleById,
+  deleteCommentById,
+  getAllUsers,
 } = require("./controller/controller")
 
 const customError = (status, msg) => ({ status, msg })
@@ -43,6 +45,8 @@ app.get("/api/articles/:article_id/comments", getComments)
 app.post("/api/articles/:article_id/comments", addCommentToArticle)
 app.get("/api/articles", getAllArticles)
 app.patch("/api/articles/:article_id", updateArticleById)
+app.delete("/api/comments/:comment_id", deleteCommentById)
+app.get("/api/users", getAllUsers)
 
 app.use((req, res, next) => {
   console.log("404 error middleware triggered")
@@ -76,6 +80,11 @@ const apiDescription = {
     requestBody: { inc_votes: "integer" },
     responseBody: { article: "object" },
     errors: ["Bad Request", "Not Found"],
+  },
+  "GET /api/users": {
+    description: "Get all users",
+    responseBody: { users: "array" },
+    errors: [],
   },
 }
 
