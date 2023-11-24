@@ -461,13 +461,12 @@ test("should update an artcle votes with a positive value", (done) => {
     .send({ inc_votes: 5 })
     .expect(200)
     .end((err, res) => {
-      if (err) return done(err)
+      if (err) return done(err) / expect(res.body.article).toBeDefined()
 
-      // console.log(res.body.article, "< ---------reponse")
-      // console.log(res.body.article)
-      expect(res.body.article).toBeDefined()
+      expect(res.body.article).toHaveProperty("title")
+      expect(res.body.article).toHaveProperty("author")
 
-      expect(res.body.article.votes).toBeGreaterThan(0)
+      expect(res.body.article.votes).toBe(105)
       done()
     })
 })
@@ -475,7 +474,11 @@ test("should handle bad request when inc_votes is not an integer", (done) => {
   request(app)
     .patch("/api/articles/1")
     .send({ inc_votes: "invalid" })
-    .expect(400, done)
+    .expect(400)
+    .expect(
+      { status: 400, msg: "Bad Request - inc_votes must be an integer" },
+      done
+    )
 })
 
 test("should handle not found when the article_id does not exist", (done) => {
@@ -483,18 +486,4 @@ test("should handle not found when the article_id does not exist", (done) => {
     .patch("/api/articles/999")
     .send({ inc_votes: 2 })
     .expect(404, done)
-})
-test("should have the correct response structure", (done) => {
-  request(app)
-    .patch("/api/articles/1")
-    .send({ inc_votes: 5 })
-    .expect(200)
-    .end((err, res) => {
-      if (err) return done(err)
-
-      expect(res.body.article).toHaveProperty("title")
-      expect(res.body.article).toHaveProperty("author")
-
-      done()
-    })
 })
