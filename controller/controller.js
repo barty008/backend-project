@@ -8,6 +8,7 @@ const {
 
   addCommentToArticle,
   updateArticleVotes,
+  deleteComment,
 } = require("../model/model")
 
 exports.getTopics = (req, res, next) => {
@@ -113,6 +114,17 @@ exports.updateArticleById = (req, res, next) => {
   updateArticleVotes(article_id, inc_votes)
     .then((updatedArticle) => {
       res.status(200).send({ article: updatedArticle })
+    })
+    .catch(next)
+}
+//  task 9
+exports.deleteCommentById = (req, res, next) => {
+  const { comment_id } = req.params
+
+  // model function to delete the comment by comment_id
+  deleteComment(comment_id)
+    .then(() => {
+      res.status(204).end()
     })
     .catch(next)
 }
