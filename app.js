@@ -43,6 +43,9 @@ app.get("/api/articles/:article_id", getArticleById)
 app.get("/api/articles/:article_id/comments", getComments)
 app.post("/api/articles/:article_id/comments", addCommentToArticle)
 app.get("/api/articles", getAllArticles)
+
+app.get("/api/articles/topic", getAllArticles)
+
 app.patch("/api/articles/:article_id", updateArticleById)
 app.delete("/api/comments/:comment_id", deleteCommentById)
 
@@ -77,6 +80,12 @@ const apiDescription = {
     description: "Update an article by article_id",
     requestBody: { inc_votes: "integer" },
     responseBody: { article: "object" },
+    errors: ["Bad Request", "Not Found"],
+  },
+  "GET /api/articles/topic": {
+    description: "Get all articles with optional topic query",
+    queryParameters: { topic: "string (optional)" },
+    responseBody: { articles: "array" },
     errors: ["Bad Request", "Not Found"],
   },
 }
