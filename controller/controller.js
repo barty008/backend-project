@@ -121,10 +121,9 @@ exports.updateArticleById = (req, res, next) => {
 exports.deleteCommentById = (req, res, next) => {
   const { comment_id } = req.params
 
-  // Call the model function to delete the comment by comment_id
+  // model function to delete the comment by comment_id
   deleteComment(comment_id)
     .then(() => {
-      // Respond with status 204 and no content
       res.status(204).end()
     })
     .catch(next)

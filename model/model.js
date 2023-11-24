@@ -129,9 +129,6 @@ exports.updateArticleVotes = (article_id, inc_votes) => {
 }
 
 // task 9
-// exports.deleteComment = (comment_id) => {
-//   return db.query("DELETE FROM comments WHERE comment_id = $1", [comment_id])
-// }
 
 exports.deleteComment = (comment_id) => {
   return db
@@ -140,7 +137,7 @@ exports.deleteComment = (comment_id) => {
     ])
     .then(({ rows }) => {
       if (rows.length === 0) {
-        // If no rows were affected, the comment doesn't exist
+        //  no rows were affected, the comment doesnt exist
         return Promise.reject({
           status: 404,
           msg: "Not Found - Comment not found",

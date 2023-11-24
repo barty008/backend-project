@@ -485,7 +485,7 @@ test("should handle not found when the article_id does not exist", (done) => {
 })
 
 // 9
-// __tests__/app.test.js
+
 test("should delete a comment by comment_id", (done) => {
   request(app)
     .delete("/api/comments/1")
@@ -493,7 +493,6 @@ test("should delete a comment by comment_id", (done) => {
     .end((err, res) => {
       if (err) return done(err)
 
-      // Ensure that the response body is empty
       expect(res.body).toEqual({})
       done()
     })
@@ -520,7 +519,7 @@ describe("deleteCommentById ()", () => {
         if (err) return done(err)
 
         expect(res.body.msg).toBe("Bad Request")
-        done()
+        done() // NC mentors - this is a call back provided by jest, it signals that the test has completed. it is used for handling async tasks i find it useful for me for readiabilty.
       })
   })
 })

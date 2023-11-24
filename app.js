@@ -79,6 +79,12 @@ const apiDescription = {
     responseBody: { article: "object" },
     errors: ["Bad Request", "Not Found"],
   },
+
+  "DELETE /api/comments/:comment_id": {
+    description: "delete a comment by comment_id",
+    responseBody: {},
+    errors: ["Not Found", "Other Errors"],
+  },
 }
 
 app.get("/api", (req, res) => {
