@@ -118,7 +118,7 @@ exports.updateArticleVotes = (article_id, inc_votes) => {
   const queryValues = [inc_votes, article_id]
 
   // console.log("SQL Query:", queryString)
-  // console.log("Query Values:", queryValues)
+  console.log("Query Values:", queryValues)
 
   return db.query(queryString, queryValues).then(({ rows }) => {
     if (!rows.length) {
@@ -127,7 +127,7 @@ exports.updateArticleVotes = (article_id, inc_votes) => {
         msg: "Not Found - Article not found",
       })
     }
-    // console.log("Updated Article:=========", rows[0])
+    console.log("Updated Article:=========", rows[0])
     return rows[0]
   })
 }
