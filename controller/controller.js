@@ -5,10 +5,10 @@ const {
   selectAllArticles,
   selectComments,
   checkArticleExists,
-
   addCommentToArticle,
   updateArticleVotes,
   deleteComment,
+  getAllUsersFromModel,
 } = require("../model/model")
 
 exports.getTopics = (req, res, next) => {
@@ -126,6 +126,15 @@ exports.deleteCommentById = (req, res, next) => {
     .then(() => {
       // Respond with status 204 and no content
       res.status(204).end()
+    })
+    .catch(next)
+}
+
+// 10
+exports.getAllUsers = (req, res, next) => {
+  getAllUsersFromModel()
+    .then((users) => {
+      res.status(200).send({ users })
     })
     .catch(next)
 }

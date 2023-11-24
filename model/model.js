@@ -148,3 +148,9 @@ exports.deleteComment = (comment_id) => {
       }
     })
 }
+// 10
+exports.getAllUsersFromModel = () => {
+  return db
+    .query("SELECT username, name, avatar_url FROM users;")
+    .then(({ rows }) => rows)
+}

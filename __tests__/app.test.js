@@ -524,3 +524,50 @@ describe("deleteCommentById ()", () => {
       })
   })
 })
+// 10
+// app.test.js
+
+const model = require("../model/model")
+
+describe("getting all users", () => {
+  test("should handle no users found", () => {
+    // save the original function
+    const originalGetAllUsersFromModel = model.getAllUsersFromModel
+
+    // mock the model, replace the existing function
+    model.getAllUsersFromModel = jest.fn(() => {
+      return Promise.resolve([])
+    })
+
+    return request(app)
+      .get("/api/users")
+      .expect(200)
+      .then((res) => {
+        expect(res.body.users).toBeInstanceOf(Array)
+        expect(res.body.users.length).toBe(4)
+
+        model.getAllUsersFromModel = originalGetAllUsersFromModel
+      })
+  })
+  test("should return users when found", () => {
+    model.getAllUsersFromModel = jest.fn(() => {
+      return Promise.resolve([
+        {
+          username: "butter_bridge",
+          name: "jonny",
+          avatar_url:
+            "https://www.healthytherapies.com/wp-content/uploads/2016/06/Lime3.jpg",
+        },
+      ])
+    })
+
+    return request(app)
+      .get("/api/users")
+      .expect(200)
+      .then((res) => {
+        expect(res.body.users).toBeInstanceOf(Array)
+        expect(res.body.users.length).toBeGreaterThan(0)
+        expect(res.body.users[0].username).toBe("butter_bridge")
+      })
+  })
+})
