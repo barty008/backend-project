@@ -524,3 +524,24 @@ describe("deleteCommentById ()", () => {
       })
   })
 })
+
+// struggling to do  test 11
+
+describe("GET /api/articles/topic", () => {
+  test("responds with 200 and returns an array of articles for a valid topic", () => {
+    const validTopicSlug = "mitch"
+
+    return request(app)
+      .get(`/api/articles?topic=${validTopicSlug}`)
+      .expect(200)
+      .expect((response) => {
+        // console.log(response.status)
+        console.log(response.body)
+        expect(Array.isArray(response.body.articles)).toBe(true)
+      })
+      .catch((error) => {
+        console.error(`unexpected error: ${error.message}`)
+        throw error
+      })
+  })
+})

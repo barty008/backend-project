@@ -44,7 +44,7 @@ app.get("/api/articles/:article_id/comments", getComments)
 app.post("/api/articles/:article_id/comments", addCommentToArticle)
 app.get("/api/articles", getAllArticles)
 //
-app.get("/api/articles/topic", getAllArticles)
+// app.get("/api/articles/topic", getAllArticles)
 
 app.get("/api/articles/topic", getArticlesByTopic)
 
