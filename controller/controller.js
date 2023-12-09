@@ -138,3 +138,24 @@ exports.getAllUsers = (req, res, next) => {
     })
     .catch(next)
 }
+
+// 11
+
+exports.getArticlesByTopic = (req, res, next) => {
+  // Getting topic query
+  const { topic } = req.query
+
+  console.log("Request received with topic:", topic)
+
+  selectArticlesByTopic(topic)
+    .then((articles) => {
+      res.status(200).send({ articles })
+    })
+    .catch((error) => {
+      if (error.status === 404) {
+        res.status(404).send({ error: error.message })
+      } else {
+        next(error)
+      }
+    })
+}

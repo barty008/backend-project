@@ -552,3 +552,28 @@ describe("getting all users", () => {
       })
   })
 })
+
+describe("GET /api/articles/topic", () => {
+  test("responds with 200 and returns an array of articles for a valid topic", () => {
+    const validTopicSlug = "mitch"
+
+    return request(app)
+      .get(`/api/articles?topic=${validTopicSlug}`)
+      .expect(200)
+      .expect((response) => {
+        expect(Array.isArray(response.body.articles)).toBe(true)
+      })
+  })
+
+  test("responds with 200 and returns an empty array for a valid topic with no articles", () => {
+    const validTopicSlugWithNoArticles = "paper"
+
+    return request(app)
+      .get(`/api/articles?topic=${validTopicSlugWithNoArticles}`)
+      .expect(200)
+      .expect((response) => {
+        expect(Array.isArray(response.body.articles)).toBe(true)
+        expect(response.body.articles).toHaveLength(13)
+      })
+  })
+})
