@@ -133,17 +133,20 @@ exports.deleteCommentById = (req, res, next) => {
 // 11
 // getiting articles by a specific topic
 exports.getArticlesByTopic = (req, res, next) => {
-  // getting topic query
+  // Getting topic query
   const { topic } = req.query
 
   console.log("Request received with topic:", topic)
 
-  // Call model function to get articles filtered by topic
   selectArticlesByTopic(topic)
     .then((articles) => {
-      // success
       res.status(200).send({ articles })
     })
-    // errors
-    .catch(next)
+    .catch((error) => {
+      if (error.status === 404) {
+        res.status(404).send({ error: error.message })
+      } else {
+        next(error)
+      }
+    })
 }
