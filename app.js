@@ -10,6 +10,8 @@ const {
   deleteCommentById,
   getAllUsers,
 } = require("./controller/controller")
+const cors = require("cors")
+app.use(cors())
 
 const customError = (status, msg) => ({ status, msg })
 
