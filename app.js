@@ -11,6 +11,8 @@ const {
   getAllUsers,
 } = require("./controller/controller")
 const cors = require("cors")
+const app = express()
+app.use(express.json())
 app.use(cors())
 
 const customError = (status, msg) => ({ status, msg })
@@ -36,9 +38,6 @@ const serverError = (err, req, res, next) => {
     res.status(500).send({ msg: "Internal Server Error" })
   }
 }
-
-const app = express()
-app.use(express.json())
 
 app.get("/api/topics", getTopics)
 app.get("/api", getEndPoints)
