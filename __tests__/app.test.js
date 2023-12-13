@@ -389,7 +389,7 @@ describe("/api/articles/:article_id/comment", () => {
       .expect(404)
       .then(({ body }) => {
         expect(body.status).toBe(404)
-        expect(body.msg).toBe("Not Found")
+        expect(body.msg).toBe("Not Found - Article not found")
       })
   })
 
@@ -414,10 +414,27 @@ describe("/api/articles/:article_id/comment", () => {
     return request(app)
       .post(`/api/articles/${articleId}/comments`)
       .send(userComment)
-      .expect(400) // Adjusted to expect 400 Bad Request
+      .expect(400)
       .then((response) => {
+        // console.log(response)
         expect(response.body.msg).toBe("Bad Request")
       })
+  })
+  test("POST: 201 adds a comment to an article", () => {
+    const articleId = 1
+    const userComment = {
+      username: "butter_bridge",
+      body: "This is a test comment.",
+    }
+
+    return request(app)
+      .post(`/api/articles/${articleId}/comments`)
+      .send(userComment)
+      .expect(201)
+    // .then((response) => {
+    //   console.log(response)
+    //   expect(response.body.msg).toBe("Bad Request")
+    // })
   })
 })
 
@@ -445,9 +462,9 @@ test("POST: 404 with Not Found for non-existent article ID", () => {
   return request(app)
     .post(`/api/articles/${nonExistentArticleId}/comments`)
     .send(userComment)
-    .expect(400)
+    .expect(404)
     .then((response) => {
-      expect(response.body.msg).toBe("Bad Request")
+      expect(response.body.msg).toBe("Not Found - Article not found")
     })
 })
 // 8==========

@@ -81,15 +81,15 @@ exports.getComments = (req, res, next) => {
 }
 // task 7
 exports.addCommentToArticle = (request, response, next) => {
-  const { articleId } = request.params
+  const { article_id } = request.params
   const commentData = request.body
 
-  if (!/^[0-9]+$/.test(articleId)) {
+  if (!/^[0-9]+$/.test(article_id)) {
     next({ status: 400, msg: "Bad Request" })
   } else {
-    checkArticleExistence(articleId)
+    checkArticleExists(article_id)
       .then(() => {
-        return addCommentToArticle(articleId, commentData)
+        return addCommentToArticle(article_id, commentData)
       })
       .then((newComment) => {
         response.status(201).send({ newComment })

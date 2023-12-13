@@ -31,7 +31,7 @@ const pgError = (err, req, res, next) => {
 }
 
 const serverError = (err, req, res, next) => {
-  // console.log(err)
+  console.log(err)
   if (err.status) {
     res.status(err.status).send({ status: err.status, msg: err.msg })
   } else {
